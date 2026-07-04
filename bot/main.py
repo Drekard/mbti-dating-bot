@@ -8,7 +8,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from aiogram import Bot, Dispatcher, types
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import BotCommand
-from aiogram.webhook.security import InputSecretHeader
 
 from bot.config import BOT_TOKEN, ADMIN_IDS, API_HOST, API_PORT, APP_URL
 from bot.database.models import init_db, SessionLocal
