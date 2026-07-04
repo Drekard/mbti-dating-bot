@@ -1,14 +1,14 @@
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
 from aiogram import Bot, Dispatcher, types
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import BotCommand
-from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
+from aiogram.webhook.security import InputSecretHeader
 
 from bot.config import BOT_TOKEN, ADMIN_IDS, API_HOST, API_PORT, APP_URL
 from bot.database.models import init_db, SessionLocal
@@ -26,25 +26,34 @@ COMMANDS = [
 WEBHOOK_PATH = f"/webhook/{BOT_TOKEN}"
 WEBHOOK_URL = f"{APP_URL}{WEBHOOK_PATH}" if APP_URL else ""
 
+bot = Bot(token=BOT_TOKEN)
+storage = MemoryStorage()
+dp = Dispatcher(storage=storage)
+
+db = SessionLocal()
+dp.update.middleware(AuthMiddleware(db))
+
+dp.include_router(start.router)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
 
-    bot = Bot(token=BOT_TOKEN)
     try:
         await bot.set_my_commands(COMMANDS)
     except Exception as e:
         logging.warning(f"Не удалось зарегистрировать команды: {e}")
 
     if APP_URL:
-        await bot.set_webhook(WEBHOOK_URL, drop_pending_updates=True)
+        await bot.set_webhook(WEBHOOK_URL, drop_pending_updates=True, secret_token="mbti-dating-secret")
         logging.info(f"Webhook установлен: {WEBHOOK_URL}")
     else:
         logging.warning("APP_URL не задан — бот не будет работать")
 
     yield
 
+    await bot.delete_webhook()
     await bot.session.close()
 
 
@@ -57,15 +66,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-bot = Bot(token=BOT_TOKEN)
-storage = MemoryStorage()
-dp = Dispatcher(storage=storage)
-
-db = SessionLocal()
-dp.update.middleware(AuthMiddleware(db))
-
-dp.include_router(start.router)
-
 
 @app.get("/health")
 def health():
@@ -77,10 +77,15 @@ def root():
     return {"message": "MBTI Dating API", "docs": "/docs"}
 
 
-webhook_handler = SimpleRequestHandler(dispatcher=dp, bot=bot)
-app.add_route(WEBHOOK_PATH, webhook_handler, methods=["POST"])
+@app.post(WEBHOOK_PATH)
+async def webhook(request: Request):
+    header = request.headers.get("X-Telegram-Bot-Api-Secret-Token")
+    if header != "mbti-dating-secret":
+        return Response(status_code=401)
+    update = await request.json()
+    await dp.feed_webhook_update(bot, update)
+    return Response(status_code=200)
 
-setup_application(app, dp, bot=bot)
 
 app.mount("/web", StaticFiles(directory="web", html=True), name="web")
 
