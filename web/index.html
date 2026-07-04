@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>MBTI Dating</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--tg-theme-bg-color, #fff);
+            color: var(--tg-theme-text-color, #000);
+            min-height: 100vh;
+            padding: 16px;
+        }
+
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        .card {
+            background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .card h2 { margin-bottom: 12px; font-size: 20px; }
+        .card p { margin-bottom: 8px; line-height: 1.5; }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 8px;
+            background: var(--tg-theme-button-color, #3390ec);
+            color: var(--tg-theme-button-text-color, #fff);
+        }
+
+        .btn:active { opacity: 0.8; }
+        .btn.secondary { background: var(--tg-theme-hint-color, #999); }
+        .btn.danger { background: #e53935; }
+        .btn.success { background: #43a047; }
+
+        .btn-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-row .btn { flex: 1; }
+
+        .field {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--tg-theme-hint-color, #eee);
+        }
+
+        .field:last-child { border-bottom: none; }
+        .field label { font-weight: 600; }
+        .field span { color: var(--tg-theme-hint-color, #666); }
+        .field span.filled { color: var(--tg-theme-text-color, #000); }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--tg-theme-hint-color, #ccc);
+            background: var(--tg-theme-bg-color, #fff);
+            color: var(--tg-theme-text-color, #000);
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        textarea { min-height: 100px; resize: vertical; }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+            border-top: 1px solid var(--tg-theme-hint-color, #ddd);
+        }
+
+        .nav-item {
+            flex: 1;
+            padding: 12px 8px;
+            text-align: center;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .nav-item.active { color: var(--tg-theme-button-color, #3390ec); }
+        .nav-icon { font-size: 24px; display: block; margin-bottom: 4px; }
+
+        .profile-photo {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .empty { text-align: center; padding: 40px 20px; color: var(--tg-theme-hint-color, #999); }
+
+        .mbti-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .mbti-btn {
+            padding: 10px 4px;
+            border-radius: 8px;
+            border: 1px solid var(--tg-theme-hint-color, #ccc);
+            background: var(--tg-theme-bg-color, #fff);
+            color: var(--tg-theme-text-color, #000);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .mbti-btn.selected {
+            background: var(--tg-theme-button-color, #3390ec);
+            color: #fff;
+            border-color: var(--tg-theme-button-color, #3390ec);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-badge.published { background: #43a047; color: #fff; }
+        .status-badge.hidden { background: #999; color: #fff; }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Browse Screen -->
+        <div id="screen-browse" class="screen active">
+            <div id="browse-content"></div>
+        </div>
+
+        <!-- Profile Screen -->
+        <div id="screen-profile" class="screen">
+            <div id="profile-content"></div>
+        </div>
+
+        <!-- Edit Profile Screen -->
+        <div id="screen-edit" class="screen">
+            <div id="edit-content"></div>
+        </div>
+
+        <!-- Stats Screen -->
+        <div id="screen-stats" class="screen">
+            <div id="stats-content"></div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="showScreen('browse')">
+            <span class="nav-icon">🔍</span>
+            Анкеты
+        </div>
+        <div class="nav-item" onclick="showScreen('profile')">
+            <span class="nav-icon">👤</span>
+            Профиль
+        </div>
+        <div class="nav-item" onclick="showScreen('stats')">
+            <span class="nav-icon">📊</span>
+            Статистика
+        </div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+
+        const API_BASE = '';
+        const initData = tg.initData;
+
+        async function api(path, options = {}) {
+            const headers = {
+                'X-Telegram-Init-Data': initData,
+                ...options.headers,
+            };
+            if (options.body && !(options.body instanceof FormData)) {
+                headers['Content-Type'] = 'application/json';
+            }
+            const resp = await fetch(`${API_BASE}${path}`, {
+                ...options,
+                headers,
+            });
+            if (!resp.ok) throw new Error(`API error: ${resp.status}`);
+            return resp.json();
+        }
+
+        function showScreen(name) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(`screen-${name}`).classList.add('active');
+            event?.target?.classList?.add('active');
+
+            if (name === 'browse') loadBrowse();
+            if (name === 'profile') loadProfile();
+            if (name === 'stats') loadStats();
+        }
+
+        async function loadBrowse() {
+            try {
+                const profiles = await api('/api/browse?limit=1');
+                const el = document.getElementById('browse-content');
+
+                if (!profiles.length) {
+                    el.innerHTML = '<div class="empty">Анкет пока нет. Загляни позже!</div>';
+                    return;
+                }
+
+                const p = profiles[0];
+                let html = '<div class="card">';
+                if (p.name) html += `<h2>${escapeHtml(p.name)}</h2>`;
+                html += `<p><b>MBTI:</b> ${escapeHtml(p.mbti_type) || '[nil]'}</p>`;
+                if (p.gender) html += `<p><b>Гендер:</b> ${escapeHtml(p.gender)}</p>`;
+                if (p.age) html += `<p><b>Возраст:</b> ${p.age}</p>`;
+                if (p.communication_form) html += `<p><b>Форма общения:</b> ${escapeHtml(p.communication_form)}</p>`;
+                if (p.description) html += `<p><b>О себе:</b> ${escapeHtml(p.description)}</p>`;
+                if (p.looking_for) html += `<p><b>Ищет:</b> ${escapeHtml(p.looking_for)}</p>`;
+                html += '</div>';
+
+                html += '<div class="btn-row">';
+                html += `<button class="btn success" onclick="sendLike(${p.user_id}, 'like')">❤️ Лайк</button>`;
+                html += `<button class="btn danger" onclick="sendLike(${p.user_id}, 'dislike')">💔 Дизлайк</button>`;
+                html += '</div>';
+                html += `<button class="btn secondary" onclick="loadBrowse()">Пропустить</button>`;
+
+                el.innerHTML = html;
+            } catch (e) {
+                document.getElementById('browse-content').innerHTML = `<div class="empty">Ошибка загрузки: ${e.message}</div>`;
+            }
+        }
+
+        async function sendLike(targetId, type) {
+            try {
+                const result = await api('/api/like', {
+                    method: 'POST',
+                    body: JSON.stringify({ target_user_id: targetId, like_type: type }),
+                });
+                if (result.match) {
+                    tg.showAlert('🎉 Мэтч! Вы лайкнули друг друга!');
+                }
+                loadBrowse();
+            } catch (e) {
+                tg.showAlert('Ошибка: ' + e.message);
+            }
+        }
+
+        async function loadProfile() {
+            try {
+                const profile = await api('/api/profile/me');
+                const el = document.getElementById('profile-content');
+
+                const status = profile.is_visible && profile.is_approved
+                    ? '<span class="status-badge published">Опубликована</span>'
+                    : '<span class="status-badge hidden">Скрыта</span>';
+
+                let html = `<div class="card"><h2>Моя анкета ${status}</h2>`;
+                html += `<div class="field"><label>Видимость</label><span class="${profile.visibility_mode !== 'public' ? '' : 'filled'}">${profile.visibility_mode === 'public' ? 'Публично' : 'Анонимно'}</span></div>`;
+                html += `<div class="field"><label>Имя</label><span class="${profile.name ? 'filled' : ''}">${profile.name || '[nil]'}</span></div>`;
+                html += `<div class="field"><label>Гендер</label><span class="${profile.gender ? 'filled' : ''}">${profile.gender || '[nil]'}</span></div>`;
+                html += `<div class="field"><label>Возраст</label><span class="${profile.age ? 'filled' : ''}">${profile.age || '[nil]'}</span></div>`;
+                html += `<div class="field"><label>MBTI</label><span class="${profile.mbti_type ? 'filled' : ''}">${profile.mbti_type || '[nil]'}</span></div>`;
+                html += `<div class="field"><label>Форма общения</label><span class="${profile.communication_form ? 'filled' : ''}">${profile.communication_form || '[nil]'}</span></div>`;
+                html += `<div class="field"><label>О себе</label><span class="${profile.description ? 'filled' : ''}">${profile.description || '[nil]'}</span></div>`;
+                html += `<div class="field"><label>Кого ищу</label><span class="${profile.looking_for ? 'filled' : ''}">${profile.looking_for || '[nil]'}</span></div>`;
+                html += `<div class="field"><label>Фото</label><span class="${profile.photo_count ? 'filled' : ''}">${profile.photo_count || 0} фото</span></div>`;
+                html += '</div>';
+
+                html += `<button class="btn" onclick="showEdit()">Редактировать</button>`;
+                html += '<div class="btn-row">';
+                html += `<button class="btn success" onclick="publishProfile()">Опубликовать</button>`;
+                html += `<button class="btn secondary" onclick="hideProfile()">Скрыть</button>`;
+                html += '</div>';
+                html += `<button class="btn danger" onclick="deleteProfile()">Удалить анкету</button>`;
+
+                el.innerHTML = html;
+            } catch (e) {
+                document.getElementById('profile-content').innerHTML = `<div class="empty">Ошибка: ${e.message}</div>`;
+            }
+        }
+
+        function showEdit() {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screen-edit').classList.add('active');
+            loadEditForm();
+        }
+
+        async function loadEditForm() {
+            try {
+                const profile = await api('/api/profile/me');
+                const el = document.getElementById('edit-content');
+
+                let html = '<div class="card"><h2>Редактировать</h2>';
+                html += '<label>Имя</label><input id="edit-name" value="' + escapeAttr(profile.name || '') + '">';
+                html += '<label>Гендер</label><select id="edit-gender"><option value="">Выбери</option><option value="М"' + (profile.gender === 'М' ? ' selected' : '') + '>М</option><option value="Ж"' + (profile.gender === 'Ж' ? ' selected' : '') + '>Ж</option></select>';
+                html += '<label>Возраст</label><input type="number" id="edit-age" value="' + (profile.age || '') + '">';
+                html += '<label>MBTI</label><div class="mbti-grid" id="mbti-grid"></div>';
+                html += '<label>Форма общения</label><input id="edit-comm" value="' + escapeAttr(profile.communication_form || '') + '" placeholder="Онлайн, Оффлайн...">';
+                html += '<label>О себе</label><textarea id="edit-desc" maxlength="500">' + escapeHtml(profile.description || '') + '</textarea>';
+                html += '<label>Кого ищу</label><textarea id="edit-looking" maxlength="500">' + escapeHtml(profile.looking_for || '') + '</textarea>';
+                html += '</div>';
+                html += '<button class="btn" onclick="saveProfile()">Сохранить</button>';
+                html += '<button class="btn secondary" onclick="showScreen(\'profile\')">Назад</button>';
+
+                el.innerHTML = html;
+
+                const mbtiTypes = ["INTJ","INTP","ENTJ","ENTP","INFJ","INFP","ENFJ","ENFP","ISTJ","ISFJ","ESTJ","ESFJ","ISTP","ISFP","ESTP","ESFP"];
+                const grid = document.getElementById('mbti-grid');
+                mbtiTypes.forEach(type => {
+                    const btn = document.createElement('button');
+                    btn.className = 'mbti-btn' + (profile.mbti_type === type ? ' selected' : '');
+                    btn.textContent = type;
+                    btn.onclick = () => {
+                        grid.querySelectorAll('.mbti-btn').forEach(b => b.classList.remove('selected'));
+                        btn.classList.add('selected');
+                    };
+                    grid.appendChild(btn);
+                });
+            } catch (e) {
+                document.getElementById('edit-content').innerHTML = `<div class="empty">Ошибка: ${e.message}</div>`;
+            }
+        }
+
+        async function saveProfile() {
+            const selectedMbti = document.querySelector('.mbti-btn.selected');
+            const data = {
+                name: document.getElementById('edit-name').value,
+                gender: document.getElementById('edit-gender').value,
+                age: parseInt(document.getElementById('edit-age').value) || null,
+                mbti_type: selectedMbti ? selectedMbti.textContent : '',
+                communication_form: document.getElementById('edit-comm').value,
+                description: document.getElementById('edit-desc').value,
+                looking_for: document.getElementById('edit-looking').value,
+            };
+
+            try {
+                await api('/api/profile/create', {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                });
+                tg.showAlert('Сохранено!');
+                showScreen('profile');
+            } catch (e) {
+                tg.showAlert('Ошибка: ' + e.message);
+            }
+        }
+
+        async function publishProfile() {
+            try {
+                await api('/api/profile/publish', { method: 'POST' });
+                tg.showAlert('Анкета опубликована! ✅');
+                loadProfile();
+            } catch (e) {
+                tg.showAlert('Ошибка: ' + e.message);
+            }
+        }
+
+        async function hideProfile() {
+            try {
+                await api('/api/profile/hide', { method: 'POST' });
+                tg.showAlert('Анкета скрыта');
+                loadProfile();
+            } catch (e) {
+                tg.showAlert('Ошибка: ' + e.message);
+            }
+        }
+
+        async function deleteProfile() {
+            if (confirm('Удалить анкету?')) {
+                try {
+                    await api('/api/profile/delete', { method: 'DELETE' });
+                    tg.showAlert('Анкета удалена');
+                    loadProfile();
+                } catch (e) {
+                    tg.showAlert('Ошибка: ' + e.message);
+                }
+            }
+        }
+
+        async function loadStats() {
+            try {
+                const stats = await api('/api/stats');
+                const el = document.getElementById('stats-content');
+                el.innerHTML = `<div class="card">
+                    <h2>Статистика</h2>
+                    <p>❤️ Лайков: ${stats.likes_received}</p>
+                    <p>🤝 Мэтчей: ${stats.matches}</p>
+                    <p>⭐ Рейтинг: ${stats.avg_rating || 'нет отзывов'}</p>
+                    <p>📝 Отзывов: ${stats.total_reviews}</p>
+                </div>`;
+            } catch (e) {
+                document.getElementById('stats-content').innerHTML = `<div class="empty">Ошибка: ${e.message}</div>`;
+            }
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function escapeAttr(str) {
+            return str.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+
+        loadBrowse();
+    </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: mbti-dating-bot
+    env: python
+    region: frankfurt
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m bot.main
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: ADMIN_IDS
+        sync: false
+      - key: DATABASE_URL
+        value: sqlite:///bot.db
+      - key: APP_URL
+        fromService:
+          type: web
+          name: mbti-dating-bot
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: API_HOST
+        value: 0.0.0.0
+      - key: API_PORT
+        value: 10000
+      - key: PREMIUM_PRICE_STARS
+        value: 299
+      - key: REFERRAL_BONUS_DAYS
+        value: 3
+      - key: DAILY_VIEW_LIMIT
+        value: 10
+      - key: AUTO_APPROVE
+        value: "true"
