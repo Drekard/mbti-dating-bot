@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from aiogram import Bot, Dispatcher, types
 from aiogram.fsm.storage.memory import MemoryStorage
-from aiogram.types import BotCommand
+from aiogram.types import BotCommand, MenuButtonWebApp, WebAppInfo
 
 from bot.config import BOT_TOKEN, ADMIN_IDS, API_HOST, API_PORT, APP_URL
 from bot.database.models import init_db, SessionLocal
@@ -47,6 +47,15 @@ async def lifespan(app: FastAPI):
     if APP_URL:
         await bot.set_webhook(WEBHOOK_URL, drop_pending_updates=True, secret_token="mbti-dating-secret")
         logging.info(f"Webhook установлен: {WEBHOOK_URL}")
+
+        mini_app_url = f"{APP_URL}/web/"
+        await bot.set_chat_menu_button(
+            menu_button=MenuButtonWebApp(
+                text="Открыть",
+                web_app=WebAppInfo(url=mini_app_url)
+            )
+        )
+        logging.info(f"Mini App URL обновлён: {mini_app_url}")
     else:
         logging.warning("APP_URL не задан — бот не будет работать")
 
