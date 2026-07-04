@@ -91,4 +91,4 @@ app.mount("/web", StaticFiles(directory="web", html=True), name="web")
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("bot.main:app", host=API_HOST, port=API_PORT, log_level="info")
+    uvicorn.run(app, host=API_HOST, port=API_PORT, log_level="info")
