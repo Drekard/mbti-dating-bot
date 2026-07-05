@@ -13,6 +13,7 @@ from bot.config import BOT_TOKEN, ADMIN_IDS, API_HOST, API_PORT, APP_URL
 from bot.database.models import init_db, SessionLocal
 from bot.middlewares.auth import AuthMiddleware
 from bot.handlers import start
+from api.routes import profiles, browse, admin
 
 logging.basicConfig(level=logging.INFO)
 
@@ -73,6 +74,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(profiles.router)
+app.include_router(browse.router)
+app.include_router(admin.router)
 
 
 @app.get("/health")
