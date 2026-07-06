@@ -10,7 +10,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import BotCommand, MenuButtonWebApp, WebAppInfo
 
 from bot.config import BOT_TOKEN, ADMIN_IDS, API_HOST, API_PORT, APP_URL
-from bot.database.models import init_db, SessionLocal
+from bot.database.models import init_db
 from bot.middlewares.auth import AuthMiddleware
 from bot.handlers import start
 from api.routes import profiles, browse, admin
@@ -30,8 +30,7 @@ bot = Bot(token=BOT_TOKEN)
 storage = MemoryStorage()
 dp = Dispatcher(storage=storage)
 
-db = SessionLocal()
-dp.update.middleware(AuthMiddleware(db))
+dp.update.middleware(AuthMiddleware())
 
 dp.include_router(start.router)
 

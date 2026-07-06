@@ -30,6 +30,7 @@ class ProfileResponse(BaseModel):
     looking_for: str
     is_visible: bool
     is_approved: bool
+    is_admin: bool = False
     photo_count: int
 
 
@@ -43,6 +44,8 @@ class BrowseProfileResponse(BaseModel):
     description: str
     looking_for: str
     photo_urls: List[str]
+    profile_type: str = "personal"
+    channel_link: str = ""
 
 
 class LikeRequest(BaseModel):

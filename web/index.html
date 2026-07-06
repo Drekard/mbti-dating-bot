@@ -13,54 +13,57 @@
             background: var(--tg-theme-bg-color, #fff);
             color: var(--tg-theme-text-color, #000);
             min-height: 100vh;
-            padding: 16px;
+            padding-bottom: 70px;
         }
 
-        .screen { display: none; }
+        .screen { display: none; padding: 16px; }
         .screen.active { display: block; }
 
         .card {
             background: var(--tg-theme-secondary-bg-color, #f0f0f0);
             border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
         }
 
-        .card h2 { margin-bottom: 12px; font-size: 20px; }
-        .card p { margin-bottom: 8px; line-height: 1.5; }
+        .card h2 { margin-bottom: 8px; font-size: 18px; }
+        .card p { margin-bottom: 6px; line-height: 1.4; font-size: 14px; }
 
         .btn {
-            display: inline-block;
-            padding: 12px 24px;
+            display: block;
+            padding: 12px 20px;
             border-radius: 12px;
             border: none;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             width: 100%;
             margin-bottom: 8px;
             background: var(--tg-theme-button-color, #3390ec);
             color: var(--tg-theme-button-text-color, #fff);
+            text-align: center;
         }
 
         .btn:active { opacity: 0.8; }
         .btn.secondary { background: var(--tg-theme-hint-color, #999); }
         .btn.danger { background: #e53935; }
         .btn.success { background: #43a047; }
-
-        .btn-row {
-            display: flex;
-            gap: 8px;
+        .btn.outline {
+            background: transparent;
+            border: 2px solid var(--tg-theme-button-color, #3390ec);
+            color: var(--tg-theme-button-color, #3390ec);
         }
 
-        .btn-row .btn { flex: 1; }
+        .btn-row { display: flex; gap: 8px; }
+        .btn-row .btn { flex: 1; margin-bottom: 0; }
 
         .field {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
+            padding: 10px 0;
             border-bottom: 1px solid var(--tg-theme-hint-color, #eee);
+            font-size: 14px;
         }
 
         .field:last-child { border-bottom: none; }
@@ -75,11 +78,11 @@
             border: 1px solid var(--tg-theme-hint-color, #ccc);
             background: var(--tg-theme-bg-color, #fff);
             color: var(--tg-theme-text-color, #000);
-            font-size: 16px;
-            margin-bottom: 12px;
+            font-size: 15px;
+            margin-bottom: 10px;
         }
 
-        textarea { min-height: 100px; resize: vertical; }
+        textarea { min-height: 80px; resize: vertical; }
 
         .bottom-nav {
             position: fixed;
@@ -89,43 +92,39 @@
             display: flex;
             background: var(--tg-theme-secondary-bg-color, #f0f0f0);
             border-top: 1px solid var(--tg-theme-hint-color, #ddd);
+            z-index: 100;
         }
 
         .nav-item {
             flex: 1;
-            padding: 12px 8px;
+            padding: 8px 4px;
             text-align: center;
-            font-size: 12px;
+            font-size: 10px;
             cursor: pointer;
+            color: var(--tg-theme-hint-color, #999);
+            transition: color 0.2s;
         }
 
         .nav-item.active { color: var(--tg-theme-button-color, #3390ec); }
-        .nav-icon { font-size: 24px; display: block; margin-bottom: 4px; }
-
-        .profile-photo {
-            width: 100%;
-            max-height: 300px;
-            object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 12px;
-        }
+        .nav-icon { font-size: 22px; display: block; margin-bottom: 2px; }
 
         .empty { text-align: center; padding: 40px 20px; color: var(--tg-theme-hint-color, #999); }
+        .empty .emoji { font-size: 48px; margin-bottom: 12px; }
 
         .mbti-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-bottom: 16px;
+            gap: 6px;
+            margin-bottom: 12px;
         }
 
         .mbti-btn {
-            padding: 10px 4px;
+            padding: 8px 2px;
             border-radius: 8px;
             border: 1px solid var(--tg-theme-hint-color, #ccc);
             background: var(--tg-theme-bg-color, #fff);
             color: var(--tg-theme-text-color, #000);
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 600;
             cursor: pointer;
             text-align: center;
@@ -139,26 +138,409 @@
 
         .status-badge {
             display: inline-block;
-            padding: 4px 8px;
+            padding: 3px 8px;
             border-radius: 8px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
         }
 
         .status-badge.published { background: #43a047; color: #fff; }
+        .status-badge.pending { background: #ff9800; color: #fff; }
         .status-badge.hidden { background: #999; color: #fff; }
+        .status-badge.rejected { background: #e53935; color: #fff; }
+
+        .profile-header {
+            text-align: center;
+            padding: 20px 0 12px;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--tg-theme-button-color, #3390ec);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: #fff;
+            margin: 0 auto 10px;
+        }
+
+        .profile-name { font-size: 20px; font-weight: 700; }
+        .profile-mbti { font-size: 14px; color: var(--tg-theme-hint-color, #666); }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+        }
+
+        .stat-item { text-align: center; }
+        .stat-value { font-size: 20px; font-weight: 700; }
+        .stat-label { font-size: 11px; color: var(--tg-theme-hint-color, #666); }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .quick-action-btn {
+            padding: 14px 8px;
+            border-radius: 12px;
+            border: 1px solid var(--tg-theme-hint-color, #ddd);
+            background: var(--tg-theme-secondary-bg-color, #f5f5f5);
+            cursor: pointer;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--tg-theme-text-color, #000);
+        }
+
+        .quick-action-btn .qa-icon { font-size: 24px; display: block; margin-bottom: 4px; }
+
+        .menu-list { list-style: none; }
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--tg-theme-hint-color, #eee);
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .menu-item:last-child { border-bottom: none; }
+        .menu-icon { margin-right: 12px; font-size: 20px; }
+        .menu-arrow { margin-left: auto; color: var(--tg-theme-hint-color, #999); }
+
+        .sub-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 12px;
+            background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+            border-radius: 12px;
+            padding: 4px;
+        }
+
+        .sub-tab {
+            flex: 1;
+            padding: 8px 4px;
+            text-align: center;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--tg-theme-hint-color, #666);
+        }
+
+        .sub-tab.active {
+            background: var(--tg-theme-button-color, #3390ec);
+            color: #fff;
+        }
+
+        .browse-card {
+            background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .browse-photo {
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+            position: relative;
+        }
+
+        .browse-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .browse-info { padding: 14px; }
+        .browse-name { font-size: 20px; font-weight: 700; }
+        .browse-mbti { font-size: 14px; color: var(--tg-theme-hint-color, #666); }
+        .browse-compat {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            background: #e8f5e9;
+            color: #2e7d32;
+            margin-left: 8px;
+        }
+
+        .browse-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin: 8px 0;
+        }
+
+        .tag {
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            background: var(--tg-theme-bg-color, #fff);
+            border: 1px solid var(--tg-theme-hint-color, #ddd);
+        }
+
+        .browse-desc {
+            font-size: 13px;
+            color: var(--tg-theme-hint-color, #666);
+            margin: 6px 0;
+            line-height: 1.4;
+        }
+
+        .browse-actions {
+            display: flex;
+            gap: 8px;
+            padding: 12px 14px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .action-btn.comment { background: var(--tg-theme-secondary-bg-color, #f0f0f0); }
+        .action-btn.like { background: #43a047; color: #fff; }
+        .action-btn.skip { background: var(--tg-theme-hint-color, #ddd); }
+
+        .match-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--tg-theme-hint-color, #eee);
+        }
+
+        .match-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--tg-theme-button-color, #3390ec);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #fff;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .match-info { flex: 1; }
+        .match-name { font-weight: 600; font-size: 15px; }
+        .match-mbti { font-size: 12px; color: var(--tg-theme-hint-color, #666); }
+
+        .match-btn {
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: none;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            background: var(--tg-theme-button-color, #3390ec);
+            color: #fff;
+        }
+
+        .onboarding {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .onboarding .emoji { font-size: 64px; margin-bottom: 16px; }
+        .onboarding h2 { margin-bottom: 12px; }
+        .onboarding p { color: var(--tg-theme-hint-color, #666); margin-bottom: 20px; line-height: 1.5; }
+
+        .progress-bar {
+            height: 4px;
+            background: var(--tg-theme-hint-color, #ddd);
+            border-radius: 2px;
+            margin-bottom: 16px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--tg-theme-button-color, #3390ec);
+            border-radius: 2px;
+            transition: width 0.3s;
+        }
+
+        .step-indicator {
+            text-align: center;
+            font-size: 12px;
+            color: var(--tg-theme-hint-color, #666);
+            margin-bottom: 12px;
+        }
+
+        .rules-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+        }
+
+        .rules-modal.active { display: flex; }
+
+        .rules-content {
+            background: var(--tg-theme-bg-color, #fff);
+            border-radius: 16px;
+            padding: 20px;
+            max-height: 80vh;
+            overflow-y: auto;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .rules-content h3 { margin-bottom: 12px; }
+        .rules-content ul { margin: 12px 0; padding-left: 20px; }
+        .rules-content li { margin-bottom: 6px; font-size: 14px; line-height: 1.4; }
+
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 12px 0;
+            font-size: 14px;
+        }
+
+        .type-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
+        .type-badge.group { background: #e3f2fd; color: #1565c0; }
+        .type-badge.channel { background: #fff3e0; color: #e65100; }
+
+        .more-section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--tg-theme-hint-color, #666);
+            text-transform: uppercase;
+            padding: 12px 0 6px;
+        }
+
+        .admin-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--tg-theme-hint-color, #eee);
+            margin-bottom: 8px;
+        }
+
+        .admin-card {
+            background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .admin-btn {
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: none;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .admin-btn.approve { background: #43a047; color: #fff; }
+        .admin-btn.reject { background: #e53935; color: #fff; }
+        .admin-btn.warn { background: #ff9800; color: #fff; }
+        .admin-btn.ban { background: #333; color: #fff; }
+        .admin-btn.mute { background: #9c27b0; color: #fff; }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--tg-theme-hint-color, #ccc);
+            background: var(--tg-theme-secondary-bg-color, #f5f5f5);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .filter-btn {
+            padding: 6px 12px;
+            border-radius: 16px;
+            border: 1px solid var(--tg-theme-hint-color, #ddd);
+            background: var(--tg-theme-bg-color, #fff);
+            font-size: 12px;
+            white-space: nowrap;
+            cursor: pointer;
+            color: var(--tg-theme-text-color, #000);
+        }
+
+        .filter-btn.active {
+            background: var(--tg-theme-button-color, #3390ec);
+            color: #fff;
+            border-color: var(--tg-theme-button-color, #3390ec);
+        }
     </style>
 </head>
 <body>
     <div id="app">
+        <!-- Profile Screen (default) -->
+        <div id="screen-profile" class="screen active">
+            <div id="profile-content"></div>
+        </div>
+
         <!-- Browse Screen -->
-        <div id="screen-browse" class="screen active">
+        <div id="screen-browse" class="screen">
             <div id="browse-content"></div>
         </div>
 
-        <!-- Profile Screen -->
-        <div id="screen-profile" class="screen">
-            <div id="profile-content"></div>
+        <!-- Matches Screen -->
+        <div id="screen-matches" class="screen">
+            <div id="matches-content"></div>
+        </div>
+
+        <!-- More Screen -->
+        <div id="screen-more" class="screen">
+            <div id="more-content"></div>
+        </div>
+
+        <!-- Admin Screen -->
+        <div id="screen-admin" class="screen">
+            <div id="admin-content"></div>
         </div>
 
         <!-- Edit Profile Screen -->
@@ -166,24 +548,49 @@
             <div id="edit-content"></div>
         </div>
 
-        <!-- Stats Screen -->
-        <div id="screen-stats" class="screen">
-            <div id="stats-content"></div>
+        <!-- Onboarding Screen -->
+        <div id="screen-onboarding" class="screen">
+            <div id="onboarding-content"></div>
         </div>
     </div>
 
-    <div class="bottom-nav">
-        <div class="nav-item active" onclick="showScreen('browse')">
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav" id="bottom-nav">
+        <div class="nav-item" onclick="showScreen('browse')">
             <span class="nav-icon">🔍</span>
             Анкеты
         </div>
-        <div class="nav-item" onclick="showScreen('profile')">
+        <div class="nav-item" onclick="showScreen('matches')">
+            <span class="nav-icon">💬</span>
+            Мэтчи
+        </div>
+        <div class="nav-item active" onclick="showScreen('profile')">
             <span class="nav-icon">👤</span>
             Профиль
         </div>
-        <div class="nav-item" onclick="showScreen('stats')">
-            <span class="nav-icon">📊</span>
-            Статистика
+        <div class="nav-item" onclick="showScreen('more')">
+            <span class="nav-icon">☰</span>
+            Ещё
+        </div>
+    </div>
+
+    <!-- Rules Modal -->
+    <div class="rules-modal" id="rules-modal">
+        <div class="rules-content">
+            <h3>📋 Правила сообщества</h3>
+            <ul>
+                <li>Реальные фото, без 18+ контента</li>
+                <li>Не спамить, не оскорблять</li>
+                <li>Люди не психологи — не заполняйте людьми свою пустоту</li>
+                <li>Не ебьте людям мозги</li>
+                <li>За нарушения — бан без предупреждения</li>
+            </ul>
+            <div class="checkbox-row">
+                <input type="checkbox" id="rules-agree">
+                <label for="rules-agree">Я согласен с правилами</label>
+            </div>
+            <button class="btn" onclick="acceptRules()">Продолжить</button>
+            <button class="btn secondary" onclick="closeRules()">Отмена</button>
         </div>
     </div>
 
@@ -194,6 +601,12 @@
 
         const API_BASE = '';
         const initData = tg.initData;
+        let currentUser = null;
+        let myProfile = null;
+        let isAdmin = false;
+        let currentBrowseType = 'personal';
+        let onboardingStep = 0;
+        let onboardingData = {};
 
         async function api(path, options = {}) {
             const headers = {
@@ -213,96 +626,345 @@
 
         function showScreen(name) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(`screen-${name}`).classList.add('active');
-            event?.target?.classList?.add('active');
+            const screen = document.getElementById(`screen-${name}`);
+            if (screen) screen.classList.add('active');
 
-            if (name === 'browse') loadBrowse();
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            const navMap = { browse: 0, matches: 1, profile: 2, more: 3, admin: 3 };
+            const navItems = document.querySelectorAll('.nav-item');
+            if (navMap[name] !== undefined && navItems[navMap[name]]) {
+                navItems[navMap[name]].classList.add('active');
+            }
+
             if (name === 'profile') loadProfile();
-            if (name === 'stats') loadStats();
+            if (name === 'browse') loadBrowse();
+            if (name === 'matches') loadMatches();
+            if (name === 'more') loadMore();
+            if (name === 'admin') loadAdmin();
         }
 
-        async function loadBrowse() {
+        async function init() {
             try {
-                const profiles = await api('/api/browse?limit=1');
-                const el = document.getElementById('browse-content');
+                const profile = await api('/api/profile/me');
+                myProfile = profile;
+                currentUser = profile;
+                isAdmin = profile.is_admin || false;
 
-                if (!profiles.length) {
-                    el.innerHTML = '<div class="empty">Анкет пока нет. Загляни позже!</div>';
-                    return;
+                if (!profile.name && !profile.mbti_type) {
+                    showOnboarding();
+                } else {
+                    loadProfile();
                 }
 
-                const p = profiles[0];
-                let html = '<div class="card">';
-                if (p.name) html += `<h2>${escapeHtml(p.name)}</h2>`;
-                html += `<p><b>MBTI:</b> ${escapeHtml(p.mbti_type) || '[nil]'}</p>`;
-                if (p.gender) html += `<p><b>Гендер:</b> ${escapeHtml(p.gender)}</p>`;
-                if (p.age) html += `<p><b>Возраст:</b> ${p.age}</p>`;
-                if (p.communication_form) html += `<p><b>Форма общения:</b> ${escapeHtml(p.communication_form)}</p>`;
-                if (p.description) html += `<p><b>О себе:</b> ${escapeHtml(p.description)}</p>`;
-                if (p.looking_for) html += `<p><b>Ищет:</b> ${escapeHtml(p.looking_for)}</p>`;
-                html += '</div>';
-
-                html += '<div class="btn-row">';
-                html += `<button class="btn success" onclick="sendLike(${p.user_id}, 'like')">❤️ Лайк</button>`;
-                html += `<button class="btn danger" onclick="sendLike(${p.user_id}, 'dislike')">💔 Дизлайк</button>`;
-                html += '</div>';
-                html += `<button class="btn secondary" onclick="loadBrowse()">Пропустить</button>`;
-
-                el.innerHTML = html;
+                if (isAdmin) {
+                    const nav = document.getElementById('bottom-nav');
+                    nav.innerHTML += `
+                        <div class="nav-item" onclick="showScreen('admin')">
+                            <span class="nav-icon">⚙️</span>
+                            Админ
+                        </div>
+                    `;
+                }
             } catch (e) {
-                document.getElementById('browse-content').innerHTML = `<div class="empty">Ошибка загрузки: ${e.message}</div>`;
+                document.getElementById('profile-content').innerHTML =
+                    `<div class="empty"><div class="emoji">⚠️</div>Ошибка загрузки: ${e.message}</div>`;
             }
         }
 
-        async function sendLike(targetId, type) {
+        // ===== PROFILE SCREEN =====
+
+        async function loadProfile() {
             try {
-                const result = await api('/api/like', {
-                    method: 'POST',
-                    body: JSON.stringify({ target_user_id: targetId, like_type: type }),
-                });
-                if (result.match) {
-                    tg.showAlert('🎉 Мэтч! Вы лайкнули друг друга!');
+                const profile = await api('/api/profile/me');
+                myProfile = profile;
+                const el = document.getElementById('profile-content');
+
+                if (!profile.name && !profile.mbti_type) {
+                    showOnboarding();
+                    return;
                 }
-                loadBrowse();
+
+                let statusBadge = '';
+                if (profile.is_visible && profile.is_approved) {
+                    statusBadge = '<span class="status-badge published">Опубликована</span>';
+                } else if (!profile.is_approved && !profile.is_rejected) {
+                    statusBadge = '<span class="status-badge pending">На модерации</span>';
+                } else if (profile.is_rejected) {
+                    statusBadge = '<span class="status-badge rejected">Отклонена</span>';
+                } else {
+                    statusBadge = '<span class="status-badge hidden">Скрыта</span>';
+                }
+
+                const stats = await api('/api/stats').catch(() => ({ likes_received: 0, matches: 0, avg_rating: null, total_reviews: 0 }));
+
+                let html = `
+                    <div class="profile-header">
+                        <div class="profile-avatar">${profile.name ? profile.name[0].toUpperCase() : '👤'}</div>
+                        <div class="profile-name">${escapeHtml(profile.name || 'Без имени')}</div>
+                        <div class="profile-mbti">${profile.mbti_type || 'MBTI не указан'} ${statusBadge}</div>
+                    </div>
+                    <div class="stats-row">
+                        <div class="stat-item"><div class="stat-value">${stats.likes_received}</div><div class="stat-label">❤️ Лайки</div></div>
+                        <div class="stat-item"><div class="stat-value">${stats.matches}</div><div class="stat-label">🤝 Мэтчи</div></div>
+                        <div class="stat-item"><div class="stat-value">${stats.avg_rating || '—'}</div><div class="stat-label">⭐ Рейтинг</div></div>
+                    </div>
+                    <div class="quick-actions">
+                        <div class="quick-action-btn" onclick="showScreen('browse')">
+                            <span class="qa-icon">🔍</span>Листать
+                        </div>
+                        <div class="quick-action-btn" onclick="showEdit()">
+                            <span class="qa-icon">✏️</span>Редактировать
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="field"><label>Гендер</label><span>${profile.gender || '—'}</span></div>
+                        <div class="field"><label>Возраст</label><span>${profile.age || '—'}</span></div>
+                        <div class="field"><label>Общение</label><span>${profile.communication_form || '—'}</span></div>
+                        <div class="field"><label>О себе</label><span>${profile.description ? profile.description.substring(0, 50) + (profile.description.length > 50 ? '...' : '') : '—'}</span></div>
+                        <div class="field"><label>Ищу</label><span>${profile.looking_for ? profile.looking_for.substring(0, 50) + (profile.looking_for.length > 50 ? '...' : '') : '—'}</span></div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="btn success" onclick="publishProfile()">Опубликовать</button>
+                        <button class="btn secondary" onclick="hideProfile()">Скрыть</button>
+                    </div>
+                    <button class="btn danger" onclick="deleteProfile()">Удалить анкету</button>
+                `;
+
+                el.innerHTML = html;
+            } catch (e) {
+                document.getElementById('profile-content').innerHTML =
+                    `<div class="empty"><div class="emoji">⚠️</div>Ошибка: ${e.message}</div>`;
+            }
+        }
+
+        // ===== ONBOARDING =====
+
+        function showOnboarding() {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screen-onboarding').classList.add('active');
+            onboardingStep = 0;
+            onboardingData = {};
+            renderOnboardingStep();
+        }
+
+        function renderOnboardingStep() {
+            const el = document.getElementById('onboarding-content');
+            const steps = ['Фото', 'Основное', 'MBTI', 'О себе', 'Теги', 'Музыка', 'Правила'];
+            const progress = ((onboardingStep + 1) / steps.length) * 100;
+
+            let html = `
+                <div class="step-indicator">Шаг ${onboardingStep + 1} из ${steps.length}</div>
+                <div class="progress-bar"><div class="progress-fill" style="width: ${progress}%"></div></div>
+            `;
+
+            switch (onboardingStep) {
+                case 0:
+                    html += `
+                        <div class="onboarding">
+                            <div class="emoji">📸</div>
+                            <h2>Загрузи фото</h2>
+                            <p>Добавь 1-5 фото для своей анкеты. Реальные фото без 18+!</p>
+                            <button class="btn" onclick="skipPhoto()">Пропустить</button>
+                            <button class="btn secondary" onclick="nextStep()">Далее →</button>
+                        </div>
+                    `;
+                    break;
+                case 1:
+                    html += `
+                        <div style="padding: 16px 0">
+                            <h2 style="margin-bottom: 16px">Основное</h2>
+                            <label>Имя</label>
+                            <input id="ob-name" placeholder="Как тебя зовут?" value="${escapeAttr(onboardingData.name || '')}">
+                            <label>Гендер</label>
+                            <select id="ob-gender">
+                                <option value="">Выбери</option>
+                                <option value="М" ${onboardingData.gender === 'М' ? 'selected' : ''}>М</option>
+                                <option value="Ж" ${onboardingData.gender === 'Ж' ? 'selected' : ''}>Ж</option>
+                            </select>
+                            <label>Возраст</label>
+                            <input type="number" id="ob-age" placeholder="Сколько лет?" value="${onboardingData.age || ''}">
+                            <button class="btn" onclick="saveOnboardingStep1()">Далее →</button>
+                        </div>
+                    `;
+                    break;
+                case 2:
+                    html += `
+                        <div style="padding: 16px 0">
+                            <h2 style="margin-bottom: 8px">Твой MBTI</h2>
+                            <p style="font-size: 13px; color: var(--tg-theme-hint-color, #666); margin-bottom: 12px">Выбери свой тип личности</p>
+                            <div class="mbti-grid" id="ob-mbti-grid"></div>
+                            <button class="btn" onclick="saveOnboardingStep2()">Далее →</button>
+                        </div>
+                    `;
+                    break;
+                case 3:
+                    html += `
+                        <div style="padding: 16px 0">
+                            <h2 style="margin-bottom: 16px">О себе</h2>
+                            <label>Форма общения</label>
+                            <input id="ob-comm" placeholder="Онлайн, Оффлайн, Оба варианта" value="${escapeAttr(onboardingData.communication_form || '')}">
+                            <label>О себе</label>
+                            <textarea id="ob-desc" maxlength="500" placeholder="Расскажи о себе...">${escapeHtml(onboardingData.description || '')}</textarea>
+                            <label>Кого ищешь</label>
+                            <textarea id="ob-looking" maxlength="500" placeholder="Кого хочешь найти...">${escapeHtml(onboardingData.looking_for || '')}</textarea>
+                            <button class="btn" onclick="saveOnboardingStep3()">Далее →</button>
+                        </div>
+                    `;
+                    break;
+                case 4:
+                    html += `
+                        <div style="padding: 16px 0">
+                            <h2 style="margin-bottom: 8px">Теги интересов</h2>
+                            <p style="font-size: 13px; color: var(--tg-theme-hint-color, #666); margin-bottom: 12px">Выбери до 7 тегов</p>
+                            <div id="ob-tags-grid" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
+                            <button class="btn" onclick="saveOnboardingStep4()" style="margin-top: 12px">Далее →</button>
+                        </div>
+                    `;
+                    break;
+                case 5:
+                    html += `
+                        <div style="padding: 16px 0">
+                            <h2 style="margin-bottom: 16px">🎵 Музыка</h2>
+                            <label>Любимые исполнители / группы</label>
+                            <textarea id="ob-music" placeholder="Radiohead, Björk, Aphex Twin..." maxlength="300">${escapeHtml(onboardingData.music || '')}</textarea>
+                            <p style="font-size: 12px; color: var(--tg-theme-hint-color, #666)">Через запятую. Это поможет найти людей с похожим вкусом.</p>
+                            <button class="btn" onclick="saveOnboardingStep5()">Далее →</button>
+                        </div>
+                    `;
+                    break;
+                case 6:
+                    html += `
+                        <div style="padding: 16px 0">
+                            <h2 style="margin-bottom: 16px">📋 Правила</h2>
+                            <div class="card">
+                                <ul style="padding-left: 20px; font-size: 14px; line-height: 1.8">
+                                    <li>Реальные фото, без 18+ контента</li>
+                                    <li>Не спамить, не оскорблять</li>
+                                    <li>Люди не психологи — не заполняйте людьми свою пустоту</li>
+                                    <li>Не ебьте людям мозги</li>
+                                    <li>За нарушения — бан без предупреждения</li>
+                                </ul>
+                            </div>
+                            <div class="checkbox-row">
+                                <input type="checkbox" id="ob-rules-agree">
+                                <label for="ob-rules-agree">Я согласен с правилами</label>
+                            </div>
+                            <button class="btn success" onclick="finishOnboarding()">🚀 Опубликовать анкету</button>
+                        </div>
+                    `;
+                    break;
+            }
+
+            el.innerHTML = html;
+
+            if (onboardingStep === 2) {
+                const grid = document.getElementById('ob-mbti-grid');
+                const mbtiTypes = ["INTJ","INTP","ENTJ","ENTP","INFJ","INFP","ENFJ","ENFP","ISTJ","ISFJ","ESTJ","ESFJ","ISTP","ISFP","ESTP","ESFP"];
+                mbtiTypes.forEach(type => {
+                    const btn = document.createElement('button');
+                    btn.className = 'mbti-btn' + (onboardingData.mbti_type === type ? ' selected' : '');
+                    btn.textContent = type;
+                    btn.onclick = () => {
+                        grid.querySelectorAll('.mbti-btn').forEach(b => b.classList.remove('selected'));
+                        btn.classList.add('selected');
+                    };
+                    grid.appendChild(btn);
+                });
+            }
+
+            if (onboardingStep === 4) {
+                const grid = document.getElementById('ob-tags-grid');
+                const tags = ["💻 Программист","🎮 Геймер","📚 Книголюб","🎵 Меломан","🐱 Кошатник","🐶 Собачник","🏋️ Спортсмен","🧘 Стоицизм","🎨 Творческий","🌿 Натуралист","🎬 Киноман","🍳 Кулинар","✈️ Путешественник","📷 Фотограф","🎸 Музыкант","🧠 Философ","💼 Карьерист","🏠 Домосед","🎭 Театрал","📱 Техногик"];
+                const selected = onboardingData.tags || [];
+                tags.forEach(tag => {
+                    const btn = document.createElement('button');
+                    btn.className = 'tag' + (selected.includes(tag) ? ' selected' : '');
+                    btn.style.cursor = 'pointer';
+                    btn.style.padding = '6px 10px';
+                    btn.textContent = tag;
+                    if (selected.includes(tag)) {
+                        btn.style.background = 'var(--tg-theme-button-color, #3390ec)';
+                        btn.style.color = '#fff';
+                        btn.style.borderColor = 'var(--tg-theme-button-color, #3390ec)';
+                    }
+                    btn.onclick = () => {
+                        const idx = selected.indexOf(tag);
+                        if (idx >= 0) {
+                            selected.splice(idx, 1);
+                            btn.style.background = '';
+                            btn.style.color = '';
+                            btn.style.borderColor = '';
+                        } else if (selected.length < 7) {
+                            selected.push(tag);
+                            btn.style.background = 'var(--tg-theme-button-color, #3390ec)';
+                            btn.style.color = '#fff';
+                            btn.style.borderColor = 'var(--tg-theme-button-color, #3390ec)';
+                        }
+                        onboardingData.tags = selected;
+                    };
+                    grid.appendChild(btn);
+                });
+            }
+        }
+
+        function skipPhoto() { nextStep(); }
+        function nextStep() { onboardingStep++; renderOnboardingStep(); }
+
+        function saveOnboardingStep1() {
+            onboardingData.name = document.getElementById('ob-name').value;
+            onboardingData.gender = document.getElementById('ob-gender').value;
+            onboardingData.age = parseInt(document.getElementById('ob-age').value) || null;
+            nextStep();
+        }
+
+        function saveOnboardingStep2() {
+            const selected = document.querySelector('#ob-mbti-grid .mbti-btn.selected');
+            onboardingData.mbti_type = selected ? selected.textContent : '';
+            nextStep();
+        }
+
+        function saveOnboardingStep3() {
+            onboardingData.communication_form = document.getElementById('ob-comm').value;
+            onboardingData.description = document.getElementById('ob-desc').value;
+            onboardingData.looking_for = document.getElementById('ob-looking').value;
+            nextStep();
+        }
+
+        function saveOnboardingStep4() { nextStep(); }
+
+        function saveOnboardingStep5() {
+            onboardingData.music = document.getElementById('ob-music').value;
+            nextStep();
+        }
+
+        async function finishOnboarding() {
+            const agreed = document.getElementById('ob-rules-agree').checked;
+            if (!agreed) {
+                tg.showAlert('Нужно согласиться с правилами!');
+                return;
+            }
+
+            try {
+                await api('/api/profile/create', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        name: onboardingData.name || '',
+                        gender: onboardingData.gender || '',
+                        age: onboardingData.age || null,
+                        mbti_type: onboardingData.mbti_type || '',
+                        communication_form: onboardingData.communication_form || '',
+                        description: onboardingData.description || '',
+                        looking_for: onboardingData.looking_for || '',
+                    }),
+                });
+                tg.showAlert('Анкета создана! 🎉');
+                showScreen('profile');
             } catch (e) {
                 tg.showAlert('Ошибка: ' + e.message);
             }
         }
 
-        async function loadProfile() {
-            try {
-                const profile = await api('/api/profile/me');
-                const el = document.getElementById('profile-content');
-
-                const status = profile.is_visible && profile.is_approved
-                    ? '<span class="status-badge published">Опубликована</span>'
-                    : '<span class="status-badge hidden">Скрыта</span>';
-
-                let html = `<div class="card"><h2>Моя анкета ${status}</h2>`;
-                html += `<div class="field"><label>Видимость</label><span class="${profile.visibility_mode !== 'public' ? '' : 'filled'}">${profile.visibility_mode === 'public' ? 'Публично' : 'Анонимно'}</span></div>`;
-                html += `<div class="field"><label>Имя</label><span class="${profile.name ? 'filled' : ''}">${profile.name || '[nil]'}</span></div>`;
-                html += `<div class="field"><label>Гендер</label><span class="${profile.gender ? 'filled' : ''}">${profile.gender || '[nil]'}</span></div>`;
-                html += `<div class="field"><label>Возраст</label><span class="${profile.age ? 'filled' : ''}">${profile.age || '[nil]'}</span></div>`;
-                html += `<div class="field"><label>MBTI</label><span class="${profile.mbti_type ? 'filled' : ''}">${profile.mbti_type || '[nil]'}</span></div>`;
-                html += `<div class="field"><label>Форма общения</label><span class="${profile.communication_form ? 'filled' : ''}">${profile.communication_form || '[nil]'}</span></div>`;
-                html += `<div class="field"><label>О себе</label><span class="${profile.description ? 'filled' : ''}">${profile.description || '[nil]'}</span></div>`;
-                html += `<div class="field"><label>Кого ищу</label><span class="${profile.looking_for ? 'filled' : ''}">${profile.looking_for || '[nil]'}</span></div>`;
-                html += `<div class="field"><label>Фото</label><span class="${profile.photo_count ? 'filled' : ''}">${profile.photo_count || 0} фото</span></div>`;
-                html += '</div>';
-
-                html += `<button class="btn" onclick="showEdit()">Редактировать</button>`;
-                html += '<div class="btn-row">';
-                html += `<button class="btn success" onclick="publishProfile()">Опубликовать</button>`;
-                html += `<button class="btn secondary" onclick="hideProfile()">Скрыть</button>`;
-                html += '</div>';
-                html += `<button class="btn danger" onclick="deleteProfile()">Удалить анкету</button>`;
-
-                el.innerHTML = html;
-            } catch (e) {
-                document.getElementById('profile-content').innerHTML = `<div class="empty">Ошибка: ${e.message}</div>`;
-            }
-        }
+        // ===== EDIT PROFILE =====
 
         function showEdit() {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -315,22 +977,36 @@
                 const profile = await api('/api/profile/me');
                 const el = document.getElementById('edit-content');
 
-                let html = '<div class="card"><h2>Редактировать</h2>';
-                html += '<label>Имя</label><input id="edit-name" value="' + escapeAttr(profile.name || '') + '">';
-                html += '<label>Гендер</label><select id="edit-gender"><option value="">Выбери</option><option value="М"' + (profile.gender === 'М' ? ' selected' : '') + '>М</option><option value="Ж"' + (profile.gender === 'Ж' ? ' selected' : '') + '>Ж</option></select>';
-                html += '<label>Возраст</label><input type="number" id="edit-age" value="' + (profile.age || '') + '">';
-                html += '<label>MBTI</label><div class="mbti-grid" id="mbti-grid"></div>';
-                html += '<label>Форма общения</label><input id="edit-comm" value="' + escapeAttr(profile.communication_form || '') + '" placeholder="Онлайн, Оффлайн...">';
-                html += '<label>О себе</label><textarea id="edit-desc" maxlength="500">' + escapeHtml(profile.description || '') + '</textarea>';
-                html += '<label>Кого ищу</label><textarea id="edit-looking" maxlength="500">' + escapeHtml(profile.looking_for || '') + '</textarea>';
-                html += '</div>';
-                html += '<button class="btn" onclick="saveProfile()">Сохранить</button>';
-                html += '<button class="btn secondary" onclick="showScreen(\'profile\')">Назад</button>';
+                let html = `
+                    <div style="padding: 16px 0">
+                        <h2 style="margin-bottom: 16px">Редактировать анкету</h2>
+                        <label>Имя</label>
+                        <input id="edit-name" value="${escapeAttr(profile.name || '')}">
+                        <label>Гендер</label>
+                        <select id="edit-gender">
+                            <option value="">Выбери</option>
+                            <option value="М" ${profile.gender === 'М' ? 'selected' : ''}>М</option>
+                            <option value="Ж" ${profile.gender === 'Ж' ? 'selected' : ''}>Ж</option>
+                        </select>
+                        <label>Возраст</label>
+                        <input type="number" id="edit-age" value="${profile.age || ''}">
+                        <label>MBTI</label>
+                        <div class="mbti-grid" id="edit-mbti-grid"></div>
+                        <label>Форма общения</label>
+                        <input id="edit-comm" value="${escapeAttr(profile.communication_form || '')}" placeholder="Онлайн, Оффлайн...">
+                        <label>О себе</label>
+                        <textarea id="edit-desc" maxlength="500">${escapeHtml(profile.description || '')}</textarea>
+                        <label>Кого ищу</label>
+                        <textarea id="edit-looking" maxlength="500">${escapeHtml(profile.looking_for || '')}</textarea>
+                        <button class="btn success" onclick="saveProfile()">Сохранить</button>
+                        <button class="btn secondary" onclick="showScreen('profile')">Отмена</button>
+                    </div>
+                `;
 
                 el.innerHTML = html;
 
                 const mbtiTypes = ["INTJ","INTP","ENTJ","ENTP","INFJ","INFP","ENFJ","ENFP","ISTJ","ISFJ","ESTJ","ESFJ","ISTP","ISFP","ESTP","ESFP"];
-                const grid = document.getElementById('mbti-grid');
+                const grid = document.getElementById('edit-mbti-grid');
                 mbtiTypes.forEach(type => {
                     const btn = document.createElement('button');
                     btn.className = 'mbti-btn' + (profile.mbti_type === type ? ' selected' : '');
@@ -347,7 +1023,7 @@
         }
 
         async function saveProfile() {
-            const selectedMbti = document.querySelector('.mbti-btn.selected');
+            const selectedMbti = document.querySelector('#edit-mbti-grid .mbti-btn.selected');
             const data = {
                 name: document.getElementById('edit-name').value,
                 gender: document.getElementById('edit-gender').value,
@@ -363,7 +1039,7 @@
                     method: 'POST',
                     body: JSON.stringify(data),
                 });
-                tg.showAlert('Сохранено!');
+                tg.showAlert('Сохранено! ✅');
                 showScreen('profile');
             } catch (e) {
                 tg.showAlert('Ошибка: ' + e.message);
@@ -391,44 +1067,333 @@
         }
 
         async function deleteProfile() {
-            if (confirm('Удалить анкету?')) {
+            if (confirm('Удалить анкету? Это действие нельзя отменить.')) {
                 try {
                     await api('/api/profile/delete', { method: 'DELETE' });
                     tg.showAlert('Анкета удалена');
-                    loadProfile();
+                    showOnboarding();
                 } catch (e) {
                     tg.showAlert('Ошибка: ' + e.message);
                 }
             }
         }
 
-        async function loadStats() {
+        // ===== BROWSE SCREEN =====
+
+        async function loadBrowse() {
+            const el = document.getElementById('browse-content');
+            el.innerHTML = `
+                <div class="sub-tabs">
+                    <div class="sub-tab ${currentBrowseType === 'personal' ? 'active' : ''}" onclick="setBrowseType('personal')">🔍 Люди</div>
+                    <div class="sub-tab ${currentBrowseType === 'group' ? 'active' : ''}" onclick="setBrowseType('group')">👥 Группы</div>
+                    <div class="sub-tab ${currentBrowseType === 'channel' ? 'active' : ''}" onclick="setBrowseType('channel')">📢 Каналы</div>
+                </div>
+                <div id="browse-cards"></div>
+            `;
+            loadBrowseCard();
+        }
+
+        function setBrowseType(type) {
+            currentBrowseType = type;
+            loadBrowse();
+        }
+
+        async function loadBrowseCard() {
+            const cardsEl = document.getElementById('browse-cards');
+            if (!cardsEl) return;
+
             try {
-                const stats = await api('/api/stats');
-                const el = document.getElementById('stats-content');
-                el.innerHTML = `<div class="card">
-                    <h2>Статистика</h2>
-                    <p>❤️ Лайков: ${stats.likes_received}</p>
-                    <p>🤝 Мэтчей: ${stats.matches}</p>
-                    <p>⭐ Рейтинг: ${stats.avg_rating || 'нет отзывов'}</p>
-                    <p>📝 Отзывов: ${stats.total_reviews}</p>
-                </div>`;
+                const profiles = await api(`/api/browse?type=${currentBrowseType}&limit=1`);
+                if (!profiles.length) {
+                    cardsEl.innerHTML = `<div class="empty"><div class="emoji">🔍</div>Анкет пока нет.<br>Загляни позже!</div>`;
+                    return;
+                }
+
+                const p = profiles[0];
+                const compat = myProfile && myProfile.mbti_type && p.mbti_type ? getCompatibility(myProfile.mbti_type, p.mbti_type) : null;
+
+                let typeBadge = '';
+                if (p.profile_type === 'group') typeBadge = '<span class="type-badge group">Группа</span>';
+                if (p.profile_type === 'channel') typeBadge = '<span class="type-badge channel">Канал</span>';
+
+                let linkBtn = '';
+                if (p.profile_type === 'group' || p.profile_type === 'channel') {
+                    const link = p.channel_link || '';
+                    if (link) {
+                        linkBtn = `<button class="btn outline" onclick="tg.openLink('${link}')">🔗 Открыть</button>`;
+                    }
+                }
+
+                let html = `
+                    <div class="browse-card">
+                        <div class="browse-photo">${p.name ? p.name[0].toUpperCase() : '👤'}</div>
+                        <div class="browse-info">
+                            <div class="browse-name">${escapeHtml(p.name || 'Аноним')} ${typeBadge}</div>
+                            <div class="browse-mbti">${p.mbti_type || '—'} ${p.age ? '• ' + p.age + ' лет' : ''} ${p.gender ? '• ' + p.gender : ''} ${compat ? `<span class="browse-compat">💕 ${compat}%</span>` : ''}</div>
+                            ${p.communication_form ? `<p style="font-size: 13px; margin-top: 4px">🗣️ ${escapeHtml(p.communication_form)}</p>` : ''}
+                            ${p.description ? `<div class="browse-desc">${escapeHtml(p.description)}</div>` : ''}
+                            ${p.looking_for ? `<div class="browse-desc">🎯 ${escapeHtml(p.looking_for)}</div>` : ''}
+                        </div>
+                        ${linkBtn ? `<div style="padding: 0 14px 12px">${linkBtn}</div>` : ''}
+                    </div>
+                    <div class="browse-actions">
+                        <button class="action-btn comment" onclick="tg.showAlert('Комментарии скоро!')">💬</button>
+                        <button class="action-btn like" onclick="sendLike(${p.user_id}, 'like')">❤️</button>
+                        <button class="action-btn skip" onclick="loadBrowseCard()">✖️</button>
+                    </div>
+                `;
+
+                cardsEl.innerHTML = html;
             } catch (e) {
-                document.getElementById('stats-content').innerHTML = `<div class="empty">Ошибка: ${e.message}</div>`;
+                cardsEl.innerHTML = `<div class="empty">Ошибка загрузки: ${e.message}</div>`;
             }
         }
 
+        async function sendLike(targetId, type) {
+            try {
+                const result = await api('/api/like', {
+                    method: 'POST',
+                    body: JSON.stringify({ target_user_id: targetId, like_type: type }),
+                });
+                if (result.match) {
+                    tg.showAlert('🎉 Мэтч! Вы лайкнули друг друга!');
+                }
+                loadBrowseCard();
+            } catch (e) {
+                tg.showAlert('Ошибка: ' + e.message);
+            }
+        }
+
+        function getCompatibility(myType, theirType) {
+            const compatMatrix = {
+                "INTJ": {"ENFP": 95, "ENTP": 85, "INFJ": 80, "INTP": 75, "ENTJ": 70, "INFP": 65, "ENFJ": 60, "ISTJ": 55, "ESTJ": 50, "INTJ": 45, "ISFJ": 40, "ESFJ": 35, "ISTP": 50, "ESTP": 45, "ISFP": 40, "ESFP": 35},
+                "ENFP": {"INTJ": 95, "INFJ": 90, "ENTP": 85, "INFP": 80, "ENFJ": 75, "ENTJ": 70, "INTP": 65, "ENFP": 45, "ISFJ": 55, "ESFJ": 50, "ISTJ": 40, "ESTJ": 35, "ISTP": 60, "ESTP": 55, "ISFP": 70, "ESFP": 65},
+                "INFJ": {"ENFP": 90, "ENTP": 85, "INTJ": 80, "ENFJ": 75, "INFP": 70, "ENTJ": 65, "INTP": 60, "INFJ": 45, "ISFJ": 65, "ESFJ": 60, "ISTJ": 55, "ESTJ": 50, "ISTP": 55, "ESTP": 50, "ISFP": 75, "ESFP": 70},
+                "ENTP": {"INFJ": 85, "INTJ": 85, "ENFP": 85, "ENTJ": 80, "INTP": 75, "ENFJ": 70, "INFP": 65, "ENTP": 45, "ISFJ": 40, "ESFJ": 35, "ISTJ": 50, "ESTJ": 55, "ISTP": 70, "ESTP": 75, "ISFP": 50, "ESFP": 60},
+            };
+            const row = compatMatrix[myType];
+            if (!row) return Math.floor(Math.random() * 40 + 40);
+            return row[theirType] || Math.floor(Math.random() * 40 + 40);
+        }
+
+        // ===== MATCHES SCREEN =====
+
+        async function loadMatches() {
+            const el = document.getElementById('matches-content');
+            el.innerHTML = '<div class="empty"><div class="emoji">⏳</div>Загрузка...</div>';
+
+            try {
+                const matches = await api('/api/matches').catch(() => []);
+
+                if (!matches || !matches.length) {
+                    el.innerHTML = `
+                        <div class="empty">
+                            <div class="emoji">💬</div>
+                            <h3>Мэтчей пока нет</h3>
+                            <p style="margin-top: 8px">Листай анкеты — когда кто-то ответит взаимностью, появится мэтч!</p>
+                            <button class="btn" style="margin-top: 16px" onclick="showScreen('browse')">🔍 Листать анкеты</button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let html = `<h2 style="margin-bottom: 12px">Мэтчи (${matches.length})</h2>`;
+                matches.forEach(m => {
+                    html += `
+                        <div class="match-item">
+                            <div class="match-avatar">${m.name ? m.name[0].toUpperCase() : '👤'}</div>
+                            <div class="match-info">
+                                <div class="match-name">${escapeHtml(m.name || 'Аноним')}</div>
+                                <div class="match-mbti">${m.mbti_type || '—'} ${m.age ? '• ' + m.age : ''}</div>
+                            </div>
+                            <button class="match-btn" onclick="tg.openLink('https://t.me/')">Написать</button>
+                        </div>
+                    `;
+                });
+
+                el.innerHTML = html;
+            } catch (e) {
+                el.innerHTML = `<div class="empty">Ошибка: ${e.message}</div>`;
+            }
+        }
+
+        // ===== MORE SCREEN =====
+
+        async function loadMore() {
+            const el = document.getElementById('more-content');
+
+            try {
+                const profile = await api('/api/profile/me');
+                const premium = profile.is_premium || false;
+
+                let html = `
+                    <div class="profile-header" style="padding: 16px 0">
+                        <div class="profile-avatar" style="width: 60px; height: 60px; font-size: 24px">${profile.name ? profile.name[0].toUpperCase() : '👤'}</div>
+                        <div class="profile-name" style="font-size: 18px">${escapeHtml(profile.name || 'Пользователь')}</div>
+                        <div class="profile-mbti">${profile.mbti_type || ''}</div>
+                    </div>
+
+                    <div class="more-section-title">Премиум</div>
+                    <ul class="menu-list">
+                        <li class="menu-item" onclick="showPremium()">
+                            <span class="menu-icon">⭐</span>
+                            Премиум
+                            ${premium ? '<span style="margin-left: auto; color: #43a047; font-size: 12px">Активен</span>' : '<span class="menu-arrow">›</span>'}
+                        </li>
+                        <li class="menu-item" onclick="showWhoLikedMe()">
+                            <span class="menu-icon">👀</span>
+                            Кто лайкнул меня
+                            <span class="menu-arrow">›</span>
+                        </li>
+                    </ul>
+
+                    <div class="more-section-title">Социальное</div>
+                    <ul class="menu-list">
+                        <li class="menu-item" onclick="showReferral()">
+                            <span class="menu-icon">👥</span>
+                            Рефералы
+                            <span class="menu-arrow">›</span>
+                        </li>
+                    </ul>
+
+                    <div class="more-section-title">Прочее</div>
+                    <ul class="menu-list">
+                        <li class="menu-item" onclick="showRules()">
+                            <span class="menu-icon">📋</span>
+                            Правила
+                            <span class="menu-arrow">›</span>
+                        </li>
+                        <li class="menu-item" onclick="showSettings()">
+                            <span class="menu-icon">⚙️</span>
+                            Настройки
+                            <span class="menu-arrow">›</span>
+                        </li>
+                        <li class="menu-item" onclick="tg.showAlert('Напиши @admin в Telegram')">
+                            <span class="menu-icon">❓</span>
+                            Помощь
+                            <span class="menu-arrow">›</span>
+                        </li>
+                    </ul>
+                `;
+
+                el.innerHTML = html;
+            } catch (e) {
+                el.innerHTML = `<div class="empty">Ошибка: ${e.message}</div>`;
+            }
+        }
+
+        function showPremium() {
+            tg.showAlert('⭐ Премиум — 299 Stars/мес\n\n• Кто лайкнул меня\n• Режим невидимки\n• Приоритет в ленте\n• Групповые анкеты\n• Реклама канала\n\nСкоро!');
+        }
+
+        function showWhoLikedMe() {
+            tg.showAlert('👀 Эта функция доступна только для премиум-пользователей.');
+        }
+
+        function showReferral() {
+            tg.showAlert('👥 Реферальная система скоро!\n\nПригласи друга и получи 3 дня премиума.');
+        }
+
+        function showRules() {
+            document.getElementById('rules-modal').classList.add('active');
+        }
+
+        function closeRules() {
+            document.getElementById('rules-modal').classList.remove('active');
+        }
+
+        function acceptRules() {
+            closeRules();
+            tg.showAlert('Спасибо! Правила приняты.');
+        }
+
+        function showSettings() {
+            tg.showAlert('⚙️ Настройки скоро:\n• Уведомления\n• Видимость профиля\n• Удаление аккаунта');
+        }
+
+        // ===== ADMIN SCREEN =====
+
+        async function loadAdmin() {
+            const el = document.getElementById('admin-content');
+            el.innerHTML = '<div class="empty">⏳ Загрузка...</div>';
+
+            try {
+                const [newProfiles, stats] = await Promise.all([
+                    api('/api/admin/profiles/new').catch(() => []),
+                    api('/api/admin/stats').catch(() => ({})),
+                ]);
+
+                let html = `<h2 style="margin-bottom: 12px">⚙️ Админ-панель</h2>`;
+
+                html += `<div class="card">
+                    <div class="field"><label>Пользователей</label><span>${stats.total_users || 0}</span></div>
+                    <div class="field"><label>Анкет</label><span>${stats.total_profiles || 0}</span></div>
+                    <div class="field"><label>Мэтчей</label><span>${stats.total_matches || 0}</span></div>
+                    <div class="field"><label>Лайков</label><span>${stats.total_likes || 0}</span></div>
+                </div>`;
+
+                html += `<div class="admin-section-title">⏳ Ожидают модерации (${newProfiles.length})</div>`;
+
+                if (!newProfiles.length) {
+                    html += '<div class="empty" style="padding: 20px">Всё чисто! ✅</div>';
+                } else {
+                    newProfiles.forEach(p => {
+                        html += `
+                            <div class="admin-card">
+                                <div><b>${escapeHtml(p.name || 'Без имени')}</b>, ${p.age || '?'} ${p.gender || ''}</div>
+                                <div style="font-size: 12px; color: var(--tg-theme-hint-color, #666)">${p.mbti_type || '—'} • ${p.communication_form || '—'}</div>
+                                ${p.description ? `<div style="font-size: 12px; margin-top: 4px">${escapeHtml(p.description).substring(0, 100)}...</div>` : ''}
+                                <div class="admin-actions">
+                                    <button class="admin-btn approve" onclick="adminApprove(${p.user_id})">✅ Approve</button>
+                                    <button class="admin-btn reject" onclick="adminReject(${p.user_id})">❌ Reject</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                el.innerHTML = html;
+            } catch (e) {
+                el.innerHTML = `<div class="empty">Ошибка: ${e.message}</div>`;
+            }
+        }
+
+        async function adminApprove(userId) {
+            try {
+                await api(`/api/admin/approve/${userId}`, { method: 'POST' });
+                tg.showAlert('✅ Анкета одобрена');
+                loadAdmin();
+            } catch (e) {
+                tg.showAlert('Ошибка: ' + e.message);
+            }
+        }
+
+        async function adminReject(userId) {
+            try {
+                await api(`/api/admin/reject/${userId}`, { method: 'POST' });
+                tg.showAlert('❌ Анкета отклонена');
+                loadAdmin();
+            } catch (e) {
+                tg.showAlert('Ошибка: ' + e.message);
+            }
+        }
+
+        // ===== UTILS =====
+
         function escapeHtml(str) {
+            if (!str) return '';
             const div = document.createElement('div');
             div.textContent = str;
             return div.innerHTML;
         }
 
         function escapeAttr(str) {
+            if (!str) return '';
             return str.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         }
 
-        loadBrowse();
+        // ===== INIT =====
+        init();
     </script>
 </body>
 </html>

@@ -1,15 +1,12 @@
 from typing import Callable, Dict, Any, Awaitable
 from aiogram import BaseMiddleware
 from aiogram.types import Update, Message, CallbackQuery
-from sqlalchemy.orm import Session
 
+from bot.database.models import SessionLocal
 from bot.database.queries import UserRepo
 
 
 class AuthMiddleware(BaseMiddleware):
-    def __init__(self, db_session: Session):
-        self.db = db_session
-
     async def __call__(
         self,
         handler: Callable[[Update, Dict[str, Any]], Awaitable[Any]],
@@ -32,22 +29,26 @@ class AuthMiddleware(BaseMiddleware):
             except (ValueError, IndexError):
                 referred_by = None
 
-        user_repo = UserRepo(self.db)
-        db_user = user_repo.get_or_create(
-            user_id=user.id,
-            username=user.username,
-            first_name=user.first_name,
-            last_name=user.last_name,
-            referred_by=referred_by,
-        )
+        db = SessionLocal()
+        try:
+            user_repo = UserRepo(db)
+            db_user = user_repo.get_or_create(
+                user_id=user.id,
+                username=user.username,
+                first_name=user.first_name,
+                last_name=user.last_name,
+                referred_by=referred_by,
+            )
 
-        if db_user.is_banned:
-            if event.message:
-                await event.message.answer("Вы заблокированы.")
-            elif event.callback_query:
-                await event.callback_query.answer("Вы заблокированы.")
-            return
+            if db_user.is_banned:
+                if event.message:
+                    await event.message.answer("Вы заблокированы.")
+                elif event.callback_query:
+                    await event.callback_query.answer("Вы заблокированы.")
+                return
 
-        data["user"] = db_user
-        data["db_session"] = self.db
-        return await handler(event, data)
+            data["user"] = db_user
+            data["db_session"] = db
+            return await handler(event, data)
+        finally:
+            db.close()

@@ -197,14 +197,19 @@ class ProfileRepo:
             self.db.commit()
 
     def get_for_browse(self, exclude_user_id: int, mbti_filter: str = None,
-                       city_filter: str = None, limit: int = 1) -> List[Profile]:
+                       city_filter: str = None, limit: int = 1,
+                       profile_type: str = None) -> List[Profile]:
         query = self.db.query(Profile).filter(
             Profile.user_id != exclude_user_id,
             Profile.is_approved == True,
             Profile.is_visible == True,
             Profile.is_rejected == False,
-            Profile.mbti_type != "",
         )
+
+        if profile_type and profile_type != 'personal':
+            query = query.filter(Profile.profile_type == profile_type)
+        else:
+            query = query.filter(Profile.mbti_type != "")
 
         already_liked = self.db.query(Like.to_user_id).filter(
             Like.from_user_id == exclude_user_id

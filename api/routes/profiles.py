@@ -1,6 +1,6 @@
 import json
 from fastapi import APIRouter, Depends
-from bot.database.queries import ProfileRepo
+from bot.database.queries import ProfileRepo, UserRepo
 from bot.database.models import SessionLocal
 from api.auth import get_current_user, AuthResult
 from api.schemas import ProfileCreate, ProfileUpdate, ProfileResponse
@@ -19,10 +19,12 @@ def get_db():
 @router.get("/me", response_model=ProfileResponse)
 def get_my_profile(user: AuthResult = Depends(get_current_user), db=Depends(get_db)):
     repo = ProfileRepo(db)
+    user_repo = UserRepo(db)
     profile = repo.get_by_user(user.user_id)
     if not profile:
         profile = repo.create(user.user_id)
 
+    db_user = user_repo.get_by_id(user.user_id)
     photos = profile.get_photo_ids()
     return ProfileResponse(
         user_id=profile.user_id,
@@ -36,6 +38,7 @@ def get_my_profile(user: AuthResult = Depends(get_current_user), db=Depends(get_
         looking_for=profile.looking_for or "",
         is_visible=profile.is_visible,
         is_approved=profile.is_approved,
+        is_admin=db_user.is_admin if db_user else False,
         photo_count=len(photos),
     )
 

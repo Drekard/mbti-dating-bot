@@ -1,7 +1,7 @@
 import json
 from fastapi import APIRouter, Depends, Query
 from typing import Optional
-from bot.database.queries import ProfileRepo, UserRepo, LikeRepo
+from bot.database.queries import ProfileRepo, UserRepo, LikeRepo, MatchRepo
 from bot.database.models import SessionLocal
 from api.auth import get_current_user, AuthResult
 from api.schemas import BrowseProfileResponse, LikeRequest, StatsResponse
@@ -19,6 +19,7 @@ def get_db():
 
 @router.get("/browse", response_model=list[BrowseProfileResponse])
 def browse_profiles(
+    type: Optional[str] = Query("personal"),
     mbti_filter: Optional[str] = Query(None),
     limit: int = Query(10),
     user: AuthResult = Depends(get_current_user),
@@ -35,6 +36,7 @@ def browse_profiles(
         exclude_user_id=user.user_id,
         mbti_filter=mbti_filter,
         limit=limit,
+        profile_type=type,
     )
 
     user_repo.increment_views(user.user_id)
@@ -42,7 +44,7 @@ def browse_profiles(
     result = []
     for p in profiles:
         photos = p.get_photo_ids()
-        result.append(BrowseProfileResponse(
+        resp = BrowseProfileResponse(
             user_id=p.user_id,
             name=p.name or "",
             gender=p.gender or "",
@@ -52,7 +54,10 @@ def browse_profiles(
             description=p.description or "",
             looking_for=p.looking_for or "",
             photo_urls=[],
-        ))
+            profile_type=getattr(p, 'profile_type', 'personal') or 'personal',
+            channel_link=getattr(p, 'channel_link', '') or '',
+        )
+        result.append(resp)
 
     return result
 
@@ -65,6 +70,25 @@ def send_like(req: LikeRequest, user: AuthResult = Depends(get_current_user), db
     if match:
         return {"status": "ok", "match": True}
     return {"status": "ok", "match": False}
+
+
+@router.get("/matches")
+def get_matches(user: AuthResult = Depends(get_current_user), db=Depends(get_db)):
+    repo = MatchRepo(db)
+    profile_repo = ProfileRepo(db)
+    matches = repo.get_my_matches(user.user_id)
+
+    result = []
+    for other_id, profile in matches:
+        result.append({
+            "user_id": other_id,
+            "name": profile.name or "",
+            "mbti_type": profile.mbti_type or "",
+            "age": profile.age,
+            "gender": profile.gender or "",
+        })
+
+    return result
 
 
 @router.get("/stats", response_model=StatsResponse)

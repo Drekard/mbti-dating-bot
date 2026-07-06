@@ -27,6 +27,9 @@ class User(Base):
     last_view_reset = Column(DateTime, nullable=True)
     is_banned = Column(Boolean, default=False)
     is_admin = Column(Boolean, default=False)
+    muted_until = Column(DateTime, nullable=True)
+    warn_count = Column(Integer, default=0)
+    last_warn_reason = Column(Text, nullable=True)
 
     profile = relationship("Profile", back_populates="user", uselist=False)
     sent_likes = relationship("Like", foreign_keys="Like.from_user_id", back_populates="from_user")
@@ -57,6 +60,10 @@ class Profile(Base):
     is_approved = Column(Boolean, default=True)
     is_rejected = Column(Boolean, default=False)
     photo_file_ids = Column(Text, nullable=True, default="[]")
+    profile_type = Column(String(20), nullable=True, default="personal")
+    group_name = Column(String(255), nullable=True, default="")
+    group_size_target = Column(Integer, nullable=True)
+    channel_link = Column(String(255), nullable=True, default="")
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -65,6 +72,7 @@ class Profile(Base):
     __table_args__ = (
         Index("idx_profiles_mbti", "mbti_type"),
         Index("idx_profiles_approved", "is_approved", "is_visible"),
+        Index("idx_profiles_type", "profile_type"),
     )
 
     def get_photo_ids(self):
@@ -148,6 +156,8 @@ class Complaint(Base):
     from_user_id = Column(BigInteger, ForeignKey("users.id"), nullable=False)
     to_user_id = Column(BigInteger, ForeignKey("users.id"), nullable=False)
     reason = Column(Text, nullable=False)
+    status = Column(String(20), nullable=True, default="open")
+    admin_action = Column(String(50), nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     from_user = relationship("User", foreign_keys=[from_user_id], back_populates="complaints_given")
@@ -156,6 +166,16 @@ class Complaint(Base):
     __table_args__ = (
         UniqueConstraint("from_user_id", "to_user_id", name="uq_complaint_pair"),
     )
+
+
+class AdminNote(Base):
+    __tablename__ = "admin_notes"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(BigInteger, ForeignKey("users.id"), nullable=False)
+    admin_id = Column(BigInteger, ForeignKey("users.id"), nullable=False)
+    text = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
 
 
 class Referral(Base):
