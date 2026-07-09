@@ -224,6 +224,56 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def init_db():
     Base.metadata.create_all(bind=engine)
+    _run_migrations(engine)
+
+
+MIGRATIONS = [
+    ("users", "muted_until", "DATETIME"),
+    ("users", "warn_count", "INTEGER DEFAULT 0"),
+    ("users", "last_warn_reason", "TEXT"),
+    ("profiles", "profile_type", "VARCHAR(20) DEFAULT 'person'"),
+    ("profiles", "channel_link", "TEXT"),
+    ("profiles", "group_name", "VARCHAR(255)"),
+    ("profiles", "group_size_target", "INTEGER"),
+    ("complaints", "status", "VARCHAR(20) DEFAULT 'pending'"),
+    ("complaints", "admin_action", "TEXT"),
+]
+
+
+def _run_migrations(engine):
+    inspector = __import__("sqlalchemy").inspect(engine)
+    for table_name, col_name, col_type in MIGRATIONS:
+        try:
+            columns = [c["name"] for c in inspector.get_columns(table_name)]
+            if col_name not in columns:
+                with engine.connect() as conn:
+                    conn.execute(
+                        __import__("sqlalchemy").text(
+                            f"ALTER TABLE {table_name} ADD COLUMN {col_name} {col_type}"
+                        )
+                    )
+                    conn.commit()
+        except Exception:
+            pass
+    _ensure_admin_notes_table(engine)
+
+
+def _ensure_admin_notes_table(engine):
+    inspector = __import__("sqlalchemy").inspect(engine)
+    if "admin_notes" not in inspector.get_table_names():
+        with engine.connect() as conn:
+            conn.execute(
+                __import__("sqlalchemy").text(
+                    "CREATE TABLE admin_notes ("
+                    "  id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    "  user_id BIGINT NOT NULL,"
+                    "  admin_id BIGINT NOT NULL,"
+                    "  text TEXT NOT NULL,"
+                    "  created_at DATETIME DEFAULT CURRENT_TIMESTAMP"
+                    ")"
+                )
+            )
+            conn.commit()
 
 
 def get_db():
